@@ -1,0 +1,11 @@
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+**/.DS_Store
+**/.DS_Store?
+node_modules
+style.scss
+libgpxparser.so
+.vscode
+testFiles

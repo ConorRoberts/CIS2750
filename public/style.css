@@ -1,0 +1,252 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: "Roboto", sans-serif;
+  scroll-behavior: smooth;
+}
+
+p {
+  font-weight: 300;
+  font-size: 1rem;
+}
+
+main {
+  margin-top: 4rem;
+}
+
+.divider {
+  height: 1px;
+  background: #b6b6b6;
+  margin: 2.2rem 0;
+}
+
+table {
+  height: 5vh;
+  overflow-y: scroll;
+  font-size: 1rem;
+  width: 100%;
+  font-weight: 300;
+}
+table,
+table th,
+table td {
+  border: 1px solid black;
+  padding: 0.4rem;
+  font-size: 1rem;
+}
+table th {
+  font-weight: 400;
+  color: white;
+  background: #4b48ff;
+}
+table tr:nth-child(2n) {
+  background: whitesmoke;
+}
+table .detailed-table-element,
+table .file-table-element {
+  box-shadow: none;
+  cursor: pointer;
+  transition: all 100ms ease;
+}
+table .detailed-table-element:hover,
+table .file-table-element:hover {
+  box-shadow: 0 0 5px black;
+}
+
+.upload-form {
+  margin-top: 1rem;
+}
+
+.form-rename .rename-flex {
+  display: flex;
+  justify-content: center;
+}
+.form-rename .rename-flex div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1rem 0.6rem;
+  width: 40%;
+}
+.form-rename .rename-flex div label {
+  font-weight: 600;
+}
+
+.detailed-view {
+  width: 100%;
+}
+
+.detailed-table-element {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0;
+  border-radius: 15px;
+  box-shadow: 0 0 5px black;
+  width: 50%;
+}
+.detailed-table-element .text-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.detailed-table-element .plus-open-other {
+  font-size: 2.5rem;
+  cursor: pointer;
+  margin-right: 1rem;
+}
+.detailed-table-element h3 {
+  font-size: 1.2rem;
+}
+
+.gpx-select-container {
+  display: flex;
+  justify-content: center;
+}
+.gpx-select-container div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1rem 0.6rem;
+  display: inline-block;
+}
+.gpx-select-container div label {
+  font-weight: 600;
+}
+
+.create-flex {
+  display: flex;
+  justify-content: center;
+}
+.create-flex div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1rem 0.6rem;
+}
+.create-flex div label {
+  font-weight: 600;
+}
+
+.btn-add-waypoint {
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.form-path-between div {
+  display: flex;
+}
+.form-path-between div .input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1rem 0.6rem;
+  width: 50%;
+}
+.form-path-between div .input-container label {
+  font-weight: 600;
+}
+
+.form-find-length {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.form-find-length .find-length-input-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.form-find-length .find-length-input-container div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1rem 0.6rem;
+  width: 25%;
+}
+.form-find-length .find-length-input-container div label {
+  font-weight: 600;
+}
+
+.hidden {
+  display: none;
+}
+
+.wrapper {
+  margin: 5vh 5vw;
+}
+@media (min-width: 1300px) {
+  .wrapper {
+    margin: 5vh 25vw;
+  }
+}
+@media (min-width: 800px) {
+  .wrapper {
+    margin: 5vh 10vw;
+  }
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  position: fixed;
+  background: #4b48ff;
+  top: 0;
+  color: white;
+  padding: 0 1rem;
+}
+header h1 {
+  display: inline-block;
+  font-weight: 400;
+  font-size: 1.5rem;
+}
+header .navbar {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  list-style-type: none;
+  margin: 0;
+}
+header .navbar li a {
+  color: white;
+  display: inline-block;
+  height: 100%;
+  transition: all 300ms ease;
+  padding: 0.7rem 0.7rem;
+  text-decoration: none;
+}
+header .navbar li a:hover {
+  background: white;
+  color: black;
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+}
+.flex .form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1rem 0.6rem;
+}
+.flex .form-group label {
+  font-weight: 600;
+}
+
+form.login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

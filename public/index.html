@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>GPS Data Viewer</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="A3 2750" />
+  <meta name="keywords" content="CHANGE ME" />
+  <meta name="author" content="Conor Roberts #1056167" />
+  <!-- Load jquery, bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+  <!-- Custom CSS End -->
+  <script defer src="/index.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1>Conor Roberts</h1>
+    <ul class="navbar">
+      <li>
+        <a href="#gpx-view-table">File Log</a>
+      </li>
+      <li>
+        <a href="#detailed-view-table">Detailed View</a>
+      </li>
+      <li>
+        <a href="#database">Database</a>
+      </li>
+    </ul>
+  </header>
+  <div class="wrapper" id="a3">
+    <main>
+      <section>
+        <h2 id="gpx-view-table">File Log</h2>
+        <table>
+          <thead>
+            <th>File name</th>
+            <th>Version</th>
+            <th>Creator</th>
+            <th># Waypoints</th>
+            <th># Routes</th>
+            <th># Tracks</th>
+          </thead>
+          <tbody id="file-log">
+
+          </tbody>
+        </table>
+        <form class="upload-form" ref="upload-form" id="upload-form" action="/upload" method="post"
+          enctype="multipart/form-data">
+          <div class="form-group">
+            <input type="file" name="uploadFile" id="uploadFile" class="btn btn-secondary" />
+            <input type="submit" value="Upload" class="btn btn-secondary" />
+          </div>
+        </form>
+      </section>
+      <section>
+        <h2 id="detailed-view-table">Detailed</h2>
+        <p>Note: To use any of the components below, select a GPX file here</p>
+        <div class="gpx-select-container">
+          <div>
+            <label for="gpx-select">Selected GPX File</label>
+            <select class="form-control" id="gpx-select">
+              <option selected value="None">None</option>
+            </select>
+          </div>
+        </div>
+        <table class="detailed-view">
+          <thead>
+            <th>Component</th>
+            <th>Name</th>
+            <th>Number of Points</th>
+            <th>Length</th>
+            <th>Loop</th>
+          </thead>
+          <tbody id="detailed-view">
+            <td>No Data</td>
+            <td>No Data</td>
+            <td>No Data</td>
+            <td>No Data</td>
+            <td>No Data</td>
+          </tbody>
+        </table>
+      </section>
+      <section>
+        <h2>Rename</h2>
+        <form class="form-rename" ref="form-rename" id="form-rename">
+          <div class="rename-flex">
+            <div class="form-group">
+              <label for="input-rename-component">Component Name (e.g. "Track 1")</label>
+              <input id="input-rename-component" class="form-control" type="text" placeholder="Track 1" required>
+            </div>
+            <div class="form-group">
+              <label for="input-rename-name">New Name</label>
+              <input id="input-rename-name" class="form-control" type="text" placeholder="New name" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-secondary">Submit</button>
+          </div>
+        </form>
+      </section>
+      <section>
+        <h2>
+          Create GPX Doc
+        </h2>
+        <form id="form-create">
+          <div class="form-group create-flex">
+            <div>
+              <label for="input-create-name">New Name</label>
+              <input id="input-create-name" class="form-control" type="text" placeholder="GPX Name" required>
+            </div>
+            <div>
+              <label for="input-create-version">Version</label>
+              <input id="input-create-version" class="form-control" type="number" step="0.1" placeholder="GPX Version"
+                required>
+            </div>
+            <div>
+              <label for="input-create-creator">Creator</label>
+              <input id="input-create-creator" class="form-control" type="text" placeholder="GPX Creator" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-secondary">Create GPX Doc</button>
+          </div>
+        </form>
+      </section>
+      <section>
+        <h2>
+          Add Route
+        </h2>
+        <form id="form-add-route">
+          <div class="form-group">
+            <label for="input-add-route-name">Route Name</label>
+            <input id="input-add-route-name" class="form-control" type="text" placeholder="Route Name" required>
+          </div>
+          <button type="button" class="btn btn-secondary" id="btn-add-waypoint">Add Waypoint</button>
+          <div class="form-group" id="add-waypoints">
+
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-secondary">Create Route</button>
+          </div>
+        </form>
+      </section>
+      <section>
+        <h2>
+          Path Between
+        </h2>
+        <form id="form-path-between" class="form-path-between">
+          <div class="form-group">
+            <div class="input-container">
+              <label for="input-path-lat-1">Latitude #1</label>
+              <input id="input-path-lat-1" class="form-control" type="text" placeholder="Latitude" required>
+            </div>
+            <div class="input-container">
+              <label for="input-path-lon-1">Longitude #1</label>
+              <input id="input-path-lon-1" class="form-control" type="text" placeholder="Longitude" required>
+            </div>
+            <div class="input-container">
+              <label for="input-path-lat-2">Latitude #2</label>
+              <input id="input-path-lat-2" class="form-control" type="text" placeholder="Latitude" required>
+            </div>
+            <div class="input-container">
+              <label for="input-path-lon-2">Longitude #2</label>
+              <input id="input-path-lon-2" class="form-control" type="text" placeholder="Longitude" required>
+            </div>
+            <div class="input-container">
+              <label for="input-path-delta">Delta</label>
+              <input id="input-path-delta" class="form-control" type="text" placeholder="Delta" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-secondary">Find Path</button>
+          </div>
+        </form>
+        <table class="paths-output">
+          <thead>
+            <th>Component</th>
+            <th>Name</th>
+            <th>Number of Points</th>
+            <th>Length</th>
+            <th>Loop</th>
+          </thead>
+          <tbody id="paths-output">
+            <tr>
+              <td>No Data</td>
+              <td>No Data</td>
+              <td>No Data</td>
+              <td>No Data</td>
+              <td>No Data</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <section>
+        <h2>Find Length</h2>
+        <form id="form-find-length" class="form-find-length">
+          <div class="find-length-input-container">
+            <div class="form-group">
+              <label for="input-find-length-route">Route Length</label>
+              <input id="input-find-length-route" class="form-control" type="number" step="0.1" placeholder="Route"
+                required>
+            </div>
+            <div class="form-group">
+              <label for="input-find-length-track">Track Length</label>
+              <input id="input-find-length-track" class="form-control" type="number" step="0.1" placeholder="Track"
+                required>
+            </div>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-secondary">Find Length</button>
+          </div>
+        </form>
+        <table class="lengths-output">
+          <thead>
+            <th>Component</th>
+            <th>Name</th>
+            <th>Number of Points</th>
+            <th>Length</th>
+            <th>Loop</th>
+          </thead>
+          <tbody id="lengths-output">
+            <tr>
+              <td>No Data</td>
+              <td>No Data</td>
+              <td>No Data</td>
+              <td>No Data</td>
+              <td>No Data</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <div class="divider">
+      </div>
+      <section>
+        <h2 id="database">Database</h2>
+      </section>
+      <section id="login">
+        <h2>Login</h2>
+        <form class="login" id="form-login">
+          <div class="flex">
+            <div class="form-group">
+              <label for="login-user">User</label>
+              <input class="form-control" id="login-user">
+            </div>
+            <div class="form-group">
+              <label for="login-password">Password</label>
+              <input class="form-control" id="login-password">
+            </div>
+            <div class="form-group">
+              <label for="login-database">Database</label>
+              <input class="form-control" id="login-database">
+            </div>
+          </div>
+          <div class="form-group button-container">
+            <button class="btn btn-secondary" type="submit">Login</button>
+          </div>
+        </form>
+      </section>
+      <div class="hidden" id="db-panel">
+        <section id="db-control-panel">
+          <h2>Basic Database Functions</h2>
+          <div class="flex">
+            <button class="btn btn-secondary" id="store-files-button">Store Files</button>
+            <button class="btn btn-secondary" id="clear-tables-button">Clear Tables</button>
+            <button class="btn btn-secondary" id="display-status-button">Display Status</button>
+          </div>
+        </section>
+        <section id="db-queries">
+          <h2>Database Query</h2>
+          <div>
+            <h2>View Routes</h2>
+            <p>Note: Routes will update when the sorting method is changed</p>
+            <div class="flex">
+              <div class="input-container">
+                <label for="db-all-routes-sort">Sort By</label>
+                <select class="form-control" id="db-all-routes-sort">
+                  <option value="none" selected>None</option>
+                  <option value="name">Name</option>
+                  <option value="length">Length</option>
+                </select>
+              </div>
+            </div>
+            <table>
+              <thead>
+                <th>Route ID</th>
+                <th>Name</th>
+                <th>Length</th>
+                <th>GPX ID</th>
+              </thead>
+              <tbody id="db-all-routes-table">
+                <tr>
+                  <td>None</td>
+                  <td>None</td>
+                  <td>None</td>
+                  <td>None</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <h2>View Specific Routes</h2>
+            <div class="flex">
+              <form id="db-specific-routes-form">
+                <div class="form-group">
+                  <label for="db-specific-routes-file">File Name</label>
+                  <select class="form-control" id="db-specific-routes-file">
+                    <option value="none" selected>None</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="db-specific-routes-sort">Sort By</label>
+                  <select class="form-control" id="db-specific-routes-sort">
+                    <option value="none" selected>None</option>
+                    <option value="name">Name</option>
+                    <option value="length">Length</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-secondary">Submit</button>
+                </div>
+              </form>
+            </div>
+            <table>
+              <thead>
+                <th>File Name</th>
+                <th>Route Name</th>
+                <th>Route Length</th>
+              </thead>
+              <tbody id="db-specific-routes-table">
+                <tr>
+                  <td>None</td>
+                  <td>None</td>
+                  <td>None</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <h2>View Points From Route</h2>
+            <div class="flex">
+              <form id="db-specific-points-form">
+                <div class="form-group">
+                  <label for="db-specific-points-file">File Name</label>
+                  <select class="form-control" id="db-specific-points-file">
+                    <option value="none" selected>None</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="db-specific-points-route">Route Name</label>
+                  <select class="form-control" id="db-specific-points-route">
+                    <option value="none" selected>None</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-secondary">Submit</button>
+                </div>
+              </form>
+            </div>
+            <table>
+              <thead>
+                <th>Point Index</th>
+                <th>Point Name</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+              </thead>
+              <tbody id="db-specific-points-table">
+                <tr>
+                  <td>None</td>
+                  <td>None</td>
+                  <td>None</td>
+                  <td>None</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <h2>View Points From File</h2>
+            <div class="flex">
+              <form id="db-file-points-form">
+                <div class="form-group">
+                  <label for="db-file-points-file">File Name</label>
+                  <select class="form-control" id="db-file-points-file">
+                    <option value="none" selected>None</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="db-file-points-sort">Sort By</label>
+                  <select class="form-control" id="db-file-points-sort">
+                    <option value="name" selected>Name</option>
+                    <option value="length">Length</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-secondary">Submit</button>
+                </div>
+              </form>
+            </div>
+            <table>
+              <thead>
+                <th>Route Name</th>
+                <th>Point Index</th>
+                <th>Point Name</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+              </thead>
+              <tbody id="db-file-points-table">
+                <tr>
+                  <td>None</td>
+                  <td>None</td>
+                  <td>None</td>
+                  <td>None</td>
+                  <td>None</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <h2>View N Routes</h2>
+            <div class="flex">
+              <form id="db-n-routes-form">
+                <div class="form-group">
+                  <label for="db-n-routes-file">File Name</label>
+                  <select class="form-control" id="db-n-routes-file">
+                    <option value="none" selected>None</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="db-n-routes-sort">Sort By</label>
+                  <select class="form-control" id="db-n-routes-sort">
+                    <option value="name" selected>Name</option>
+                    <option value="length">Length</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="db-n-routes-spec">Spec</label>
+                  <select class="form-control" id="db-n-routes-spec">
+                    <option value="shortest" selected>Shortest</option>
+                    <option value="longest">Longest</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="db-n-routes-n">Number of Routes</label>
+                  <input type="number" class="form-control" id="db-n-routes-n">
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-secondary">Submit</button>
+                </div>
+              </form>
+            </div>
+            <table>
+              <thead>
+                <th>File Name</th>
+                <th>Route Name</th>
+                <th>Route Length</th>
+              </thead>
+              <tbody id="db-n-routes-table">
+                <tr>
+                  <td>None</td>
+                  <td>None</td>
+                  <td>None</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+</body>
+
+</html>
